@@ -90,6 +90,8 @@ def process_release_notes(out_path_dir, target_info):
 		messages = messages.split('\n')
 		rls_notes = ['Release notes for {0}\r\n'.format(target_info.name), 'Build version: {0}\r\n'.format(target_info.version), '============================\r\n\r\n']
 		for m in messages:
+			if m.__contains__('rlsnotes_ignore'):
+				continue
 			if m.__contains__('version_bump'):
 				if len(m.replace('version_bump','').strip()):
 					rls_notes.append(m.strip('"').replace('version_bump',''))
@@ -163,7 +165,7 @@ def get_config_targets(config_file_path):
 	version = current_version()
 	for target in targets:
 		#OUT_DIR
-		out_dir = cp.get(target, 'ARCHIVE_OUTPUT_DIR')
+		out_dir = os.path.expanduser(cp.get(target, 'ARCHIVE_OUTPUT_DIR'))
 		if not out_dir:
 			out_dir = '{0}/build/'.format(os.getcwd())
 		if not out_dir.endswith('/'):
@@ -197,13 +199,14 @@ def parse_input_args():
 
 	options, args = parser.parse_args()
 
-	config_file_path = os.getcwd() + '/build.config'
-	print '*** Using config file %s' % config_file_path
-
 	if options.dir:
 		print '*** Changing directory to %s' % options.dir
+		os.chdir(os.path.expanduser(options.dir))
 	else:
 		os.chdir('../')
+
+	config_file_path = os.getcwd() + '/autobuild/build.config'
+	print '*** Using config file %s' % config_file_path
 
 	return config_file_path
 
