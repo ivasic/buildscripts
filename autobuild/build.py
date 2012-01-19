@@ -68,7 +68,7 @@ def main():
 
 def process_release_notes(out_path_dir, target_info):
 	last_hash = None
-	rc, out = call_command_wargs('git', ['log', "--pretty=format:'%h'", '--no-merges', '--grep="version_bump"', '-1'])
+	rc, out = call_command_wargs('git', ['log', '--pretty=format:%h', '--no-merges', '--grep=Version bump', '-1'])
 	if rc is 0:
 		last_hash = out[0]
 	else:
@@ -78,9 +78,9 @@ def process_release_notes(out_path_dir, target_info):
 			return
 
 	if last_hash:
-		rc, out = call_command_wargs('git', ['log', last_hash, '..', '--pretty=format:"%s"', '--no-merges'])
+		rc, out = call_command_wargs('git', ['log', '{0}..'.format(last_hash), '--pretty=format:%s', '--no-merges'])
 	else:
-		rc, out = call_command_wargs('git', ['log', '--pretty=format:"%s"', '--no-merges'])
+		rc, out = call_command_wargs('git', ['log', '--pretty=format:%s', '--no-merges'])
 	if rc is 0:
 		messages = out[0]
 		if not messages:
@@ -94,7 +94,7 @@ def process_release_notes(out_path_dir, target_info):
 				continue
 			if m.__contains__('version_bump'):
 				if len(m.replace('version_bump','').strip()):
-					rls_notes.append(m.strip('"').replace('version_bump',''))
+					rls_notes.append(m.strip('"').replace('version_bump','').strip())
 					rls_notes.append('\r\n')
 			else:
 				rls_notes.append(m.strip('"'))
