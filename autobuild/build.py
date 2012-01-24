@@ -208,7 +208,7 @@ def parse_input_args():
 	config_file_path = os.getcwd() + '/autobuild/build.config'
 	print '*** Using config file %s' % config_file_path
 
-	if not os.path.exists(config_file_path) or os.path.isfile(config_file_path):
+	if not os.path.exists(config_file_path) or not os.path.isfile(config_file_path):
 		print '*** Config file does not exist or corrupted. Exiting.'
 		exit(1)
 
