@@ -68,7 +68,7 @@ def main():
 
 def process_release_notes(out_path_dir, target_info):
 	last_hash = None
-	rc, out = call_command_wargs('git', ['log', '--pretty=format:%h', '--no-merges', '--grep=Version bump', '-1'])
+	rc, out = call_command_wargs('git', ['log', '--pretty=format:%h', '--no-merges', '--grep=version_bump', '-1'])
 	if rc is 0:
 		last_hash = out[0]
 	else:
@@ -207,6 +207,10 @@ def parse_input_args():
 
 	config_file_path = os.getcwd() + '/autobuild/build.config'
 	print '*** Using config file %s' % config_file_path
+
+	if not os.path.exists(config_file_path) or os.path.isfile(config_file_path):
+		print '*** Config file does not exist or corrupted. Exiting.'
+		exit(1)
 
 	return config_file_path
 
