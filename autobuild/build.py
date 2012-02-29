@@ -202,8 +202,6 @@ def parse_input_args():
 	if options.dir:
 		print '*** Changing directory to %s' % options.dir
 		os.chdir(os.path.expanduser(options.dir))
-	else:
-		os.chdir('../')
 
 	config_file_path = os.getcwd() + '/autobuild/build.config'
 	print '*** Using config file %s' % config_file_path
