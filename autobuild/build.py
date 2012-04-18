@@ -33,8 +33,7 @@ def main():
 		rc, out = call_command(target.build_command)
 		if rc is not 0:
 			print '!!! Error building targets:'
-			for s in out[1]:
-				print s
+			print out[1]
 			exit(rc)
 
 		print '*** BUILD SUCCEEDED ***'
@@ -59,8 +58,7 @@ def main():
 				at_least_one_succeeded = True
 			else:
 				print '!!! Error building IPA for target %s' % file
-				for s in out[1]:
-					print s
+				print out[1]
 				exit(rc)
 
 	if at_least_one_succeeded:
@@ -73,9 +71,8 @@ def process_release_notes(out_path_dir, target_info):
 		last_hash = out[0]
 	else:
 		print '!!! Error getting last release git revision:'
-		for s in out[1]:
-			print s
-			return
+		print out[1]
+		return
 
 	if last_hash:
 		rc, out = call_command_wargs('git', ['log', '{0}..'.format(last_hash), '--pretty=format:%s', '--no-merges'])
@@ -105,9 +102,8 @@ def process_release_notes(out_path_dir, target_info):
 		file.close()
 	else:
 		print '!!! Error getting last release git revision:'
-		for s in out[1]:
-			print s
-			return
+		print out[1]
+		return
 
 def version_bump():
 	print '*** Bumping version'
@@ -118,8 +114,7 @@ def version_bump():
 			print '*** %s' % s
 	else:
 		print '!!! Error bumping version:'
-		for s in out[1]:
-			print s
+		print out[1]
 		exit(rc)
 
 def current_version():
@@ -136,8 +131,7 @@ def current_version():
 				print '!!! Unable to get project version number!'
 	else:
 		print '!!! Unable to get project version number:'
-		for s in out[1]:
-			print s
+		print out[1]
 
 def process_build_dir_after_ipa(build_dir, out_path_dir):
 	files = os.listdir(build_dir)
